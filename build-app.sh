@@ -39,6 +39,8 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 PLIST
 
 if [ -f AppIcon.icns ]; then cp AppIcon.icns "$APP/Contents/Resources/"; fi
+# Ship the fixture so "sample data" works before Full Disk Access is granted.
+if [ -f fixtures/sample-chat.db ]; then cp fixtures/sample-chat.db "$APP/Contents/Resources/"; fi
 
 echo "Signing…"
 codesign --force --deep --sign - "$APP" 2>/dev/null || codesign --force --sign - "$APP"
