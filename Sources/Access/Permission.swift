@@ -33,12 +33,13 @@ enum Permission {
 
     /// Cheap enough to call on every window activation.
     static func check() -> Status {
-        guard FileManager.default.fileExists(atPath: liveURL.path) else {
-            // The file may exist but be invisible to us without access, so a
-            // failed existence check alone does not prove there is no database.
-            return ChatDB.isReadable(liveURL) ? .granted : .denied
-        }
-        return ChatDB.isReadable(liveURL) ? .granted : .denied
+        if ChatDB.isReadable(liveURL) { return .granted }
+        // Without access the database itself may be invisible, so a missing
+        // chat.db alone proves nothing. ~/Library/Messages sits in an
+        // unprotected folder, though: if even that is absent, Messages has
+        // never been used on this Mac.
+        let messagesDir = liveURL.deletingLastPathComponent().path
+        return FileManager.default.fileExists(atPath: messagesDir) ? .denied : .noDatabase
     }
 
     /// Opens System Settings straight at the Full Disk Access list.
