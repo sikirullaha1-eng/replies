@@ -1,5 +1,11 @@
+# Private data — never publish
+fixtures/*.db
+fixtures/*.db-*
+*.sqlite
+notes/
+recordings/
+
+# Build artifacts
 .build/
 *.app/
-Replies
-fixtures/*.db
 .DS_Store
